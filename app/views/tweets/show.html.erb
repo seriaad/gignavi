@@ -1,0 +1,94 @@
+<h3>レビュー詳細</h3>
+<div class="all_content">
+   
+ <div class="main-content">
+
+   <div class="image">
+     <% if @tweet.image.attached? %>
+        <%= image_tag @tweet.image, size: '500x400'%>
+     <% end %>
+    </div>
+
+  <div class="tweet-details">
+    <div class="live_name_sh">
+     <p><strong>ライブ会場:</strong><%= @tweet.live_name %></p>
+    </div>
+    <div class="shop_name_sh">
+     <p><strong>お店の名前:</strong><%= @tweet.shop_name %></p>
+    </div>
+    <div class="total_sh">
+     <p><strong>総合評価:</strong></p>
+    </div>
+    <div class="star-rating">
+      <div class="star-rating-front" style="width: <%= getPercent(@tweet.overall) %>%;">★★★★★</div>
+      <div class="star-rating-back">★★★★★</div>
+    </div>
+    <div class="shop_type_sh">
+     <p><strong>お店の形態:</strong><%= @tweet.shop_type %></p>
+    </div>
+    <div class="review_sh">
+     <p><strong>レビュー:</strong><%= @tweet.review %></p>
+    </div>
+    <div class="created_at">
+     <p><strong>投稿日時:</strong><%= @tweet.created_at.strftime('%Y年%m月%d日 %H時%M分') %></p>
+    </div>
+    <% @tweet.tags.each do |tag| %>
+      <span><%= tag.name %></span>
+    <% end %>
+
+   <div class ="edelete">
+     <% if user_signed_in? && current_user.id == @tweet.user_id %>
+       <%= link_to "編集する", edit_tweet_path(@tweet.id) %>
+       <%= link_to "削除する", tweet_path(@tweet.id), method: :delete %>
+     <% end %>
+   </div>
+  </div>
+ </div>
+
+  <div class="map_container" >
+   <div id='map'></div>
+  </div>
+
+
+</div>
+
+<style>
+#map {
+  height: 500px;
+  width: 1000px;
+}
+</style>
+
+<!-- js部分 -->
+<script>
+//初期マップの設定
+let map;
+let marker;
+
+// 初期マップの設定
+function initMap(){
+  // 投稿に緯度経度が存在する場合のみマップを表示
+  if (<%= @tweet.lat.present? %> && <%= @tweet.lng.present? %>) {
+    const lat = <%= @tweet.lat %>;
+    const lng = <%= @tweet.lng %>;
+    const position = {lat: lat, lng: lng};
+
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: position,
+      zoom: 15,
+    });
+
+    marker = new google.maps.Marker({
+      position: position,
+      map: map
+    });
+  } else {
+    // 緯度経度がない場合はマップを表示しない、またはメッセージを表示
+    document.getElementById('map').innerHTML = '<p>地図情報がありません。</p>';
+  }
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_KEY'] %>&callback=initMap" async defer></script>
+
+</div>
+<%= link_to "Tweet一覧に戻る", tweets_path %>

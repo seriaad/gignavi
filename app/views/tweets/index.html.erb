@@ -1,0 +1,56 @@
+<div class = "list">
+<h3>一覧ページ</h3>
+
+
+<%= page_entries_info @tweets %>
+<%= paginate @tweets %>
+<%= link_to "新規投稿へ", new_tweet_path %>
+<div class="tweets-container">
+  <% @tweets.each do |t| %>
+    <div class="tweet">
+     <div class="image">
+     <% if t.image.attached? %>
+       <%= image_tag t.image, size: '250x200'%>
+      <% end %>
+      </div>
+      
+     <div class="detail">
+      <div class="email">
+       <%= t.user.email %>
+      </div>
+      <div class="live_name">
+       <%= t.live_name %>
+      </div>
+      <div class="shop_name">
+       <%= t.shop_name %>
+      </div>
+
+     <div class="total">
+     <h2>総合評価：
+     <span class="star-rating">
+       <span class="star-rating-front" style="width: <%= getPercent(t.overall) %>%;">★★★★★</span>
+       <span class="star-rating-back">★★★★★</span>
+     </span> 
+     </h2>
+     </div>
+      
+      <div class="shop_type">
+       <%= t.shop_type %>
+      </div>
+      <div class="review">
+       <%= t.review %>
+      </div>
+      <div class="created_at">
+       <%= t.created_at %>
+      </div>
+      
+       <%= link_to "詳細へ", tweet_path(t.id) %>
+     <% if user_signed_in? && current_user.id == t.user_id %>
+       <%= link_to "編集する", edit_tweet_path(t.id) %>
+       <%= link_to "削除する", tweet_path(t.id), method: :delete %>
+     <% end %>
+     </div>
+    </div>
+  <% end %>
+</div>
+</div>

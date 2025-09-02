@@ -1,0 +1,152 @@
+.tag-list {
+  display: flex; /* Flexboxを有効にする */
+  flex-wrap: wrap; /* 項目が収まらない場合に折り返す */
+  list-style: none; /* リストの黒点を消す */
+  padding: 0;
+  margin: 0;
+  gap: 10px; /* 項目間の隙間 */
+}
+
+.tag-list li {
+  /* 幅を計算して、1行に3個並ぶようにする */
+  flex-basis: calc(33.33% - 10px);
+  /* gap: 10px; を使わない場合は、width: 32% のように調整します */
+}
+
+.tag-list li label {
+  /* チェックボックスのラベルにもスタイルを適用 */
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tag-list li input[type="checkbox"]:checked + label {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/*　以下新規投稿ページの星用のCSS　*/
+
+  .post_form{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+  .post_form input[type='radio']{
+    display: none;
+  }
+  .post_form label{
+    position: relative;
+    padding: 10px 10px 0;
+    color: gray;
+    cursor: pointer;
+    font-size: 30px; /*星の大きさを変更するときはここ*/
+  }
+  .post_form label .text{
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    text-align: center;
+    font-size: 9px; /*星の上の説明書きの大きさを変更するときはここ*/
+    color: gray;
+  }
+  .post_form label:hover,
+  .post_form label:hover ~ label,
+  .post_form input[type='radio']:checked ~ label{
+    color: #ffcc00;
+  }
+
+
+/*　以下一覧ページの星用のCSS　*/
+
+  .star-rating {
+    position: relative;
+    display: inline-block;
+    width: 5em;
+    height: 1em;
+    font-size: 25px;
+  }
+  .star-rating-front {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    color: #ffcc33;
+  }
+  .star-rating-back {
+    display: inline-block;
+    color: #ccc;
+    
+  }
+
+
+
+ /* 投稿全体を横に並べるためのコンテナ */
+.tweets-container {
+
+}
+
+/* 個別の投稿（画像と文章の箱）を横に並べる */
+.tweet {
+  display: flex;
+}
+
+/* 画像の箱 */
+.tweet .image {
+  margin-bottom: 15px;
+}
+
+/* 文章の箱 */
+.detail {
+  display: flex;
+  flex-direction: column; /* 文章の箱の中を縦並びにする */
+  gap: 5px; /* 文章要素間の隙間 */
+  margin-bottom: 10px;
+}
+
+/* 総合評価の箱 */
+.tweet .total {
+  display: flex;
+  align-items: center;
+}
+
+/*以下詳細画面*/
+
+/* 地図と投稿全体を囲む箱 */
+.all_content {
+  display: flex; /* 子要素を縦に並べる */
+  flex-direction: column;
+  align-items: center; /* 子要素を水平方向に中央揃え */
+}
+
+/* 画像とテキスト要素を囲った箱 */
+.main-content {
+  display: flex; /* 子要素（画像と詳細）を横並びにする */
+  align-items: flex-start; /* 子要素を垂直方向の上端に揃える */
+  gap: 30px; /* 要素間の隙間 */
+  margin-bottom: 20px;
+}
+
+/* 投稿詳細（テキスト）の箱 */
+.tweet-details {
+  display: flex;
+  flex-direction: column; /* この箱の中の要素を縦に並べる */
+  flex-grow: 1; /* 残りのスペースを埋めるように広がる */
+}
+
+.review_sh {
+  /* 最大幅を設定し、コンテンツの幅がその幅を超えたら自動で改行 */
+  max-width: 400px;
+
+}
+
+.review {
+  /* 最大幅を設定し、コンテンツの幅がその幅を超えたら自動で改行 */
+  max-width: 400px;
+
+}

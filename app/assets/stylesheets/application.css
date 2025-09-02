@@ -1,0 +1,29 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+header{
+    display: flex;
+    justify-content: space-between; /* 子要素を両端に配置する */
+    align-items: center; /* 子要素を垂直方向の中央に揃える */
+    padding: 10px 20px;
+    background-color:#FF8C00
+
+  }
+
+.log-in{
+    display: flex; /* 子要素（ログイン・新規登録）を横並びにする */
+    gap: 15px; /* 要素間の隙間を設定する */
+    justify-content: flex-end;
+}

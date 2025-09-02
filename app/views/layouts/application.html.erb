@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Gignavi" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+ <!-- <link rel="manifest" href="/manifest.json">-->   
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+   <header>
+  <h1>GigNavi</h1>
+  <div class="header-list">
+   <ul>
+    <div class ="log-in">
+    <% if user_signed_in? %>
+     <%= button_to 'ログアウト', destroy_user_session_path, method: :delete %>
+    <% else %>
+     <%= link_to "新規登録", new_user_registration_path %>
+     <%= link_to "ログイン", new_user_session_path %>
+    <% end %>
+    </div>
+   </ul>
+   <div class ="search">
+     <%= form_tag(tweets_path, method: :get, class: 'search-form') do %>
+     <%= text_field_tag :search, params[:search], placeholder: 'キーワードを入力' %>
+     <%= submit_tag '検索する' %>
+   </div>
+<% end %>
+  </div>
+ </header>
+  <main>
+    <%= yield %>
+  </main>
+ </body>
+
+</html>
