@@ -1,179 +1,188 @@
-<h3>投稿の編集</h3>
-<%= form_with(model: @tweet, local: true) do |f| %>
+<div class="all_container">
+<div class="big_container">
+  <%= form_with(model: @tweet, local: true) do |f| %>
+  <div class="detail_container">
+    <div class="new_title">
+     <h3>投稿の編集</h3>
+    </div>
 
-  <div class="field">
-    <%= f.label :ライブ会場 %>
-    <%= f.text_field :live_name, :size => 30 %>
-  </div>
+      <div class="field">
+        <%= f.label :ライブ会場 %>
+        <%= f.text_field :live_name, :size => 30 %>
+      </div>
 
-  <div class="field">
-    <%= f.label :お店の名前 %>
-    <%= f.text_field :shop_name, :size => 30 %>
-  </div>
+      <div class="field">
+        <%= f.label :お店の名前 %>
+        <%= f.text_field :shop_name, :size => 30 %>
+      </div>
 
- <h5>総合評価</h5>
-     <div class="post_form">
-        <%= f.radio_button :overall, 5 ,id: 'star1'%>
-        <label for="star1"><span class="text">最高</span>★</label>
+     <h5>総合評価</h5>
+         <div class="post_form">
+            <%= f.radio_button :overall, 5 ,id: 'star1'%>
+            <label for="star1"><span class="text">最高</span>★</label>
     
-        <%= f.radio_button :overall, 4 ,id: 'star2'%>
-        <label for="star2"><span class="text">良い</span>★</label>
+            <%= f.radio_button :overall, 4 ,id: 'star2'%>
+            <label for="star2"><span class="text">良い</span>★</label>
     
-        <%= f.radio_button :overall, 3 ,id: 'star3'%>
-        <label for="star3"><span class="text">普通</span>★</label>
+            <%= f.radio_button :overall, 3 ,id: 'star3'%>
+            <label for="star3"><span class="text">普通</span>★</label>
     
-        <%= f.radio_button :overall, 2 ,id: 'star4'%>
-        <label for="star4"><span class="text">悪い</span>★</label>
+            <%= f.radio_button :overall, 2 ,id: 'star4'%>
+            <label for="star4"><span class="text">悪い</span>★</label>
     
-        <%= f.radio_button :overall, 1 ,id: 'star5'%>
-        <label for="star5"><span class="text">最悪</span>★</label>
-     </div>
+            <%= f.radio_button :overall, 1 ,id: 'star5'%>
+            <label for="star5"><span class="text">最悪</span>★</label>
+         </div>
 
-  <div class="field">
-    <%= f.label :お店の種類  %>
-    <%= f.select :shop_type, 
-    [["ランチ", "ランチ"], 
-    ["ディナー", "ディナー"], 
-    ["カフェ", "カフェ"], 
-    ["カラオケ", "カラオケ"],
-    ["その他", "その他"]],  include_blank: "選択して下さい" %>
-  </div>
+      <div class="field">
+        <%= f.label :お店の種類  %>
+        <%= f.select :shop_type, 
+        [["ランチ", "ランチ"], 
+        ["ディナー", "ディナー"], 
+        ["カフェ", "カフェ"], 
+        ["カラオケ", "カラオケ"],
+        ["その他", "その他"]],  include_blank: "選択して下さい" %>
+      </div>
 
 
-  <div class="field">
-    <%= f.label :レビュー  %>
-    <%= f.text_area :review, :size => "30x2" %>
-  </div>
+      <div class="field">
+        <%= f.label :レビュー  %>
+        <br>
+        <%= f.text_area :review, :size => "50x10" %>
+      </div>
 
-  <div class="field">
-    <%= f.label :画像 %>
-    <%= f.file_field :image %>
-  </div>
+      <div class="field">
+        <%= f.label :画像 %>
+        <%= f.file_field :image %>
+      </div>
 
-  <div class="field">
-    <%= f.label :lat, "緯度" %>
-    <%= f.text_field :lat, id: :lat %>
-  </div>
-  <div class="field">
-    <%= f.label :lng, "経度" %>
-    <%= f.text_field :lng, id: :lng %>
-  </div>
-
-<hr>
-
-<h2>Map</h2>
-
-<input id="address" type="textbox" value="東京都庁">
-<input type="button" value="検索" onclick="codeAddress()">
-<p>マーカーをドラック＆ドロップで位置の調整ができます。<p>
-<div id="results"></div>
-<div id='map'></div>
-
-<style>
-#map {
-  height: 600px;
-  width: 600px;
-}
-</style>
-
-<script>
-//初期マップの設定
-let map;
-let marker;
-let geocoder; // 住所から緯度経度を検索するためのサービス
-let service; // Places APIサービス
-function initMap(){
-  geocoder = new google.maps.Geocoder();
-  map = new google.maps.Map(document.getElementById('map'), {
-    center:  {lat: 35.6803997, lng:139.7690174},  //東京
-    zoom: 15,
-    
-  });
-  // Places APIのサービスを初期化
-  service = new google.maps.places.PlacesService(map);
-}
-
-//検索後のマップ作成
-function codeAddress(){
-  const inputAddress = document.getElementById('address').value;
-
-  // Places APIのfindPlaceFromQueryメソッドを使用
-  const request = {
-    query: inputAddress,
-    //fields: ['name', 'geometry', 'formatted_address'], // 必要な情報を指定
-  };
-
-  service.textSearch(request, function(results, status) {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-      displayResults(results); // 検索結果をリスト表示する関数を呼び出し
-     } else {
-      alert('該当する結果がありませんでした：' + status);
-     }
-  });
-}
-
-// 検索結果をリストで表示し、クリックでマーカーを立てる関数
-function displayResults(results){
-  const resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = ''; // 前回の検索結果をクリア
-
-  results.forEach((result, index) => {
-    const name = result.name; // Places APIの結果から店名を取得
-    const address = result.formatted_address; // 住所を取得
-    const lat = result.geometry.location.lat(); // 緯度を取得
-    const lng = result.geometry.location.lng(); // 経度を取得
-
-    const li = document.createElement('li');
-    // リストのテキストに緯度と経度を追加
-    li.textContent = `${name} (${address}) - 緯度: ${lat}, 経度: ${lng}`;
-
-    li.onclick = function() {
-      // クリックされた場所の緯度経度を取得
-      const latLng = result.geometry.location;
-
-      // 既存のマーカーがあれば削除
-      if(marker) {
-        marker.setMap(null);
-      }
+      <div class="field">
+        <%= f.label :lat, "緯度" %>
+        <%= f.text_field :lat, id: :lat %>
+      </div>
+      <div class="field">
+        <%= f.label :lng, "経度" %>
+        <%= f.text_field :lng, id: :lng %>
+      </div>
       
-      // 新しいマーカーを設置
-      marker = new google.maps.Marker({
-        map: map,
-        position: latLng,
-        draggable: true // ドラッグ可能にする
+  
+
+     <div class="new_map">
+      <h2>Map</h2>
+     </div>
+  </div>
+
+  <div class="search-map">
+    <input id="address" type="textbox" value="東京都庁">
+    <input type="button" value="検索" onclick="codeAddress()">
+  </div>
+    <p>マーカーをドラック＆ドロップで位置の調整ができます。<p>
+    <div id="results"></div>
+    <div id='map'></div>
+
+    <style>
+    #map {
+      height: 600px;
+      width: 600px;
+    }
+    </style>
+
+    <script>
+    //初期マップの設定
+    let map;
+    let marker;
+    let geocoder; // 住所から緯度経度を検索するためのサービス
+    let service; // Places APIサービス
+    function initMap(){
+      geocoder = new google.maps.Geocoder();
+      map = new google.maps.Map(document.getElementById('map'), {
+        center:  {lat: 35.6803997, lng:139.7690174},  //東京
+        zoom: 15,
+    
       });
-      map.setCenter(latLng);
+      // Places APIのサービスを初期化
+      service = new google.maps.places.PlacesService(map);
 
-      // 緯度経度をフォームに自動入力
-      document.getElementById('lat').value = latLng.lat();
-      document.getElementById('lng').value = latLng.lng();
+      document.getElementById("search-btn").addEventListener("click", codeAddress);
 
-      // ライブ会場/店名をフォームに自動入力
-      document.getElementById('tweet_shop_name').value = result.name;
+    }
 
-      // マーカーのドロップ（ドラッグ終了）時のイベントリスナー
-      google.maps.event.addListener(marker, 'dragend', function(ev){
-        document.getElementById('lat').value = ev.latLng.lat();
-        document.getElementById('lng').value = ev.latLng.lng();
+    //検索後のマップ作成
+    function codeAddress(){
+      const inputAddress = document.getElementById('address').value;
+
+      // Places APIのfindPlaceFromQueryメソッドを使用
+      const request = {
+        query: inputAddress,
+        //fields: ['name', 'geometry', 'formatted_address'], // 必要な情報を指定
+      };
+
+      service.textSearch(request, function(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          displayResults(results); // 検索結果をリスト表示する関数を呼び出し
+         } else {
+          alert('該当する結果がありませんでした：' + status);
+         }
       });
     }
-    resultsDiv.appendChild(li);
-  });
-}
-</script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_KEY'] %>&callback=initMap&libraries=places" async defer></script>
- <div class='form-group'>
-        <%= f.collection_check_boxes(:tag_ids, Tag.all, :id, :name) do |tag| %>
-            <div class='form-check'>
-                <%= tag.label class: 'form-check-label' do %>
-                    <%= tag.check_box class: 'form-check-input' %>
-                    <%= tag.text %>
-                <% end %>
-            </div>
-        <% end %>
-  </div>
+    // 検索結果をリストで表示し、クリックでマーカーを立てる関数
+    function displayResults(results){
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = ''; // 前回の検索結果をクリア
 
-  <%= f.submit "編集する" %>
-<% end %>
-<%= link_to "Tweet一覧に戻る", tweets_path %>
+      results.forEach((result, index) => {
+        const name = result.name; // Places APIの結果から店名を取得
+        const address = result.formatted_address; // 住所を取得
+        const lat = result.geometry.location.lat(); // 緯度を取得
+        const lng = result.geometry.location.lng(); // 経度を取得
+
+        const li = document.createElement('li');
+        // リストのテキストに緯度と経度を追加
+        li.textContent = `${name} (${address}) - 緯度: ${lat}, 経度: ${lng}`;
+
+        li.onclick = function() {
+          // クリックされた場所の緯度経度を取得
+          const latLng = result.geometry.location;
+
+          // 既存のマーカーがあれば削除
+          if(marker) {
+            marker.setMap(null);
+          }
+      
+          // 新しいマーカーを設置
+          marker = new google.maps.Marker({
+            map: map,
+            position: latLng,
+            draggable: true // ドラッグ可能にする
+          });
+          map.setCenter(latLng);
+
+          // 緯度経度をフォームに自動入力
+          document.getElementById('lat').value = latLng.lat();
+          document.getElementById('lng').value = latLng.lng();
+
+          // ライブ会場/店名をフォームに自動入力
+          document.getElementById('tweet_shop_name').value = result.name;
+
+          // マーカーのドロップ（ドラッグ終了）時のイベントリスナー
+          google.maps.event.addListener(marker, 'dragend', function(ev){
+            document.getElementById('lat').value = ev.latLng.lat();
+            document.getElementById('lng').value = ev.latLng.lng();
+          });
+        }
+        resultsDiv.appendChild(li);
+      });
+    }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_KEY'] %>&callback=initMap&libraries=places" async defer></script>
+    
+      <%= f.submit "更新する" %>
+   <% end %>
+    <br>
+    <br>
+    <%= link_to "一覧に戻る", tweets_path %>
+
+
+</div>
+</div>

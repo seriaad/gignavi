@@ -22,7 +22,7 @@ def index
       @tweets = @tweets.joins(:tags).where(tags: { id: tag_ids }).distinct
     end
   end
-  @tweets = @tweets.page(params[:page]).per(10)
+  @tweets = Tweet.order(created_at: :desc).page(params[:page]).per(10)
 end
 
   def new

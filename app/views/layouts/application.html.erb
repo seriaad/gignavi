@@ -19,11 +19,12 @@
 
   <body>
    <header>
-  <h1>GigNavi</h1>
+  <h1 class="logo simple"><%= link_to "GigNavi", root_path %></h1>
   <div class="header-list">
    <ul>
     <div class ="log-in">
     <% if user_signed_in? %>
+     <%= link_to "アカウント情報変更", edit_user_registration_path %>
      <%= button_to 'ログアウト', destroy_user_session_path, method: :delete %>
     <% else %>
      <%= link_to "新規登録", new_user_registration_path %>
@@ -34,7 +35,7 @@
    <div class ="search">
      <%= form_tag(tweets_path, method: :get, class: 'search-form') do %>
      <%= text_field_tag :search, params[:search], placeholder: 'キーワードを入力' %>
-     <%= submit_tag '検索する' %>
+     <%= link_to "検索する", "#", class: "search-btn", onclick: "this.closest('form').submit(); return false;" %>
    </div>
 <% end %>
   </div>
@@ -45,3 +46,4 @@
  </body>
 
 </html>
+

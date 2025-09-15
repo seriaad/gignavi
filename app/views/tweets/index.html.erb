@@ -1,56 +1,71 @@
 <div class = "list">
-<h3>一覧ページ</h3>
+<h3>投稿一覧</h3>
 
 
 <%= page_entries_info @tweets %>
 <%= paginate @tweets %>
 <%= link_to "新規投稿へ", new_tweet_path %>
+<br>
 <div class="tweets-container">
   <% @tweets.each do |t| %>
-    <div class="tweet">
-     <div class="image">
-     <% if t.image.attached? %>
-       <%= image_tag t.image, size: '250x200'%>
-      <% end %>
+    <div class="tweets">
+     <div class="tweet">
+      <div class="image">
+       <% if t.image.attached? %>
+        <%= image_tag t.image, size: '250x200'%>
+       <% else %>
+        <div style="width: 250px; height: 200px;"></div>
+       <% end %>
       </div>
       
-     <div class="detail">
-      <div class="email">
-       <%= t.user.email %>
-      </div>
-      <div class="live_name">
-       <%= t.live_name %>
-      </div>
-      <div class="shop_name">
-       <%= t.shop_name %>
-      </div>
+      <div class="detail">
+        <div class="user_name">
+         <span class="author-label">投稿者：</span>
+         <% if t.user %>
+         <%= t.user.display_name %>
+         <% else %>
+          退会済みユーザー
+         <% end %>
+        </div>
+        <div class="live_name">
+         <span class="author-label">ライブ会場：</span><%= t.live_name %>
+        </div>
+        <div class="shop_name">
+         <span class="author-label">お店の名前：</span><%= t.shop_name %>
+        </div>
+      
 
-     <div class="total">
-     <h2>総合評価：
-     <span class="star-rating">
-       <span class="star-rating-front" style="width: <%= getPercent(t.overall) %>%;">★★★★★</span>
-       <span class="star-rating-back">★★★★★</span>
-     </span> 
-     </h2>
-     </div>
+       <div class="total">
+       <h2>総合評価：
+       <span class="star-rating">
+        <span class="star-rating-front" style="width: <%= getPercent(t.overall) %>%;">★★★★★</span>
+        <span class="star-rating-back">★★★★★</span>
+       </span> 
+       </h2>
+       </div>
       
-      <div class="shop_type">
-       <%= t.shop_type %>
-      </div>
-      <div class="review">
-       <%= t.review %>
-      </div>
-      <div class="created_at">
-       <%= t.created_at %>
-      </div>
+       <div class="shop_type">
+         <span class="author-label">お店の種類：</span><%= t.shop_type %>
+       </div>
+       <div class="review">
+         <span class="author-label">レビュー：</span>
+         <%= t.review.length > 50 ? truncate(t.review, length: 50, omission: '...') : t.review %>
+       </div>
+       <div class="created_at">
+         <span class="author-label">作成日時：</span><%= t.created_at.strftime('%Y年%m月%d日 %H時%M分') %>
+       </div>
       
-       <%= link_to "詳細へ", tweet_path(t.id) %>
-     <% if user_signed_in? && current_user.id == t.user_id %>
-       <%= link_to "編集する", edit_tweet_path(t.id) %>
-       <%= link_to "削除する", tweet_path(t.id), method: :delete %>
-     <% end %>
-     </div>
+       <div class="link-group">
+         <%= button_to "詳細へ", tweet_path(t.id), method: :get %>
+         <% if user_signed_in? && current_user.id == t.user_id %>
+         <%= button_to "編集する", edit_tweet_path(t.id), method: :get %>
+         <%= button_to "削除する", tweet_path(t.id), method: :delete, data: {turbo_confirm: "本当に削除してよろしいですか？" } %>
+         <% end %>
+       </div>
+
+      </div>
     </div>
   <% end %>
+  </div>
 </div>
 </div>

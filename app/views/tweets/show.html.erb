@@ -1,6 +1,5 @@
-<h3>レビュー詳細</h3>
 <div class="all_content">
-   
+ <h3>レビュー詳細</h3>
  <div class="main-content">
 
    <div class="image">
@@ -10,23 +9,33 @@
     </div>
 
   <div class="tweet-details">
-    <div class="live_name_sh">
+    <div class="user_name">
+     <p><strong>投稿者:</strong>
+       <% if @tweet.user %>
+         <%= @tweet.user.display_name %>
+         <% else %>
+          退会済みユーザー
+        <% end %>
+      </p>
+    </div>
+    <div class="live_name">
      <p><strong>ライブ会場:</strong><%= @tweet.live_name %></p>
     </div>
-    <div class="shop_name_sh">
+    <div class="shop_name">
      <p><strong>お店の名前:</strong><%= @tweet.shop_name %></p>
     </div>
-    <div class="total_sh">
-     <p><strong>総合評価:</strong></p>
+    <div class="total">
+     <h2>総合評価:
+      <div class="star-rating">
+       <div class="star-rating-front" style="width: <%= getPercent(@tweet.overall) %>%;">★★★★★</div>
+       <div class="star-rating-back">★★★★★</div>
+      </div>
+      </h2>
     </div>
-    <div class="star-rating">
-      <div class="star-rating-front" style="width: <%= getPercent(@tweet.overall) %>%;">★★★★★</div>
-      <div class="star-rating-back">★★★★★</div>
-    </div>
-    <div class="shop_type_sh">
+    <div class="shop_type">
      <p><strong>お店の形態:</strong><%= @tweet.shop_type %></p>
     </div>
-    <div class="review_sh">
+    <div class="review">
      <p><strong>レビュー:</strong><%= @tweet.review %></p>
     </div>
     <div class="created_at">
@@ -36,17 +45,17 @@
       <span><%= tag.name %></span>
     <% end %>
 
-   <div class ="edelete">
+   <div class ="link-group">
      <% if user_signed_in? && current_user.id == @tweet.user_id %>
-       <%= link_to "編集する", edit_tweet_path(@tweet.id) %>
-       <%= link_to "削除する", tweet_path(@tweet.id), method: :delete %>
+       <%= button_to "編集する", edit_tweet_path(@tweet.id), method: :get %>
+       <%= button_to "削除する", tweet_path(@tweet.id), method: :delete, data: {turbo_confirm: "本当に削除してよろしいですか？" } %>
      <% end %>
    </div>
   </div>
  </div>
 
   <div class="map_container" >
-   <div id='map'></div>
+   <div id="map"></div>
   </div>
 
 
@@ -55,25 +64,27 @@
 <style>
 #map {
   height: 500px;
-  width: 1000px;
+  width: 800px;
 }
 </style>
 
 <!-- js部分 -->
+<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_KEY'] %>&callback=initMap&libraries=places" async defer></script>
 <script>
-//初期マップの設定
-let map;
-let marker;
+
 
 // 初期マップの設定
-function initMap(){
-  // 投稿に緯度経度が存在する場合のみマップを表示
-  if (<%= @tweet.lat.present? %> && <%= @tweet.lng.present? %>) {
-    const lat = <%= @tweet.lat %>;
-    const lng = <%= @tweet.lng %>;
-    const position = {lat: lat, lng: lng};
+function initMap() {
+  const mapEl = document.getElementById('map');
+  if (!mapEl) return;
 
-    map = new google.maps.Map(document.getElementById('map'), {
+  const lat = <%= @tweet.lat || 'null' %>;
+  const lng = <%= @tweet.lng || 'null' %>;
+
+  if (lat && lng) {
+    const position = { lat: lat, lng: lng };
+
+    map = new google.maps.Map(mapEl, {
       center: position,
       zoom: 15,
     });
@@ -82,13 +93,21 @@ function initMap(){
       position: position,
       map: map
     });
+
+    //  レンダリングが完了してからresize
+    setTimeout(() => {
+      google.maps.event.trigger(map, 'resize');
+      map.setCenter(position);
+    }, 200);
+
   } else {
-    // 緯度経度がない場合はマップを表示しない、またはメッセージを表示
-    document.getElementById('map').innerHTML = '<p>地図情報がありません。</p>';
+    mapEl.innerHTML = '<p>地図情報がありません。</p>';
   }
 }
+//  ページのDOMが完全に読み込まれてから初期化
+document.addEventListener("DOMContentLoaded", initMap);
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_KEY'] %>&callback=initMap" async defer></script>
+
 
 </div>
-<%= link_to "Tweet一覧に戻る", tweets_path %>
+<%= link_to "投稿一覧に戻る", tweets_path %>

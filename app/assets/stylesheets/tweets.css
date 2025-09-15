@@ -84,16 +84,64 @@
     
   }
 
+.total h2 {
+  margin-top: 0;    /* 上側の余白をなくす */
+  margin-bottom: 0; /* 下側の余白をなくす */
+  font-size: 1.2rem
+}
 
 
- /* 投稿全体を横に並べるためのコンテナ */
+/* 以下投稿一覧ページの装飾 */
+
+body {
+  font-family: "Meiryo", "Yu Gothic", "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  background: #fafafa;
+}
+
+
+/* リストコンテナ全体を中央に配置 */
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.list h3 {
+  font-size: 28px;
+  background-color: #FFFAF0;
+  color: #333;
+  display: block;
+  text-align: center;
+  width: 55%;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
 .tweets-container {
-
+  display: flex;
+  flex-wrap: wrap; /* 画面幅が狭いときに折り返す */
+  justify-content: center; /* 子要素を中央に配置 */
+  gap: 20px; /* 要素間の隙間を空ける */
+  max-width: 1200px; /* 適切な最大幅を設定 */
+  width: 100%;
 }
 
 /* 個別の投稿（画像と文章の箱）を横に並べる */
 .tweet {
   display: flex;
+  gap: 20px;
+  border: 3px solid #A3A3A3;
+  /* 枠内の余白を確保 */
+  padding: 30px;
+  border-radius: 10px;
 }
 
 /* 画像の箱 */
@@ -109,44 +157,314 @@
   margin-bottom: 10px;
 }
 
+.link-group {
+  display: flex; /* 子要素を横並びに配置 */
+  gap: 10px; /* リンク間の隙間を10pxに設定 */
+}
+
 /* 総合評価の箱 */
 .tweet .total {
   display: flex;
   align-items: center;
 }
 
+/* 各要素の見出し */
+.author-label {
+  font-weight: bold; /* 文字を太くする */
+  margin-right: 5px;
+  font-size: 1.2rem;
+}
+
+.tweets {
+ display: flex;
+ gap: 10px;
+ flex-direction: column;
+}
+
+.link-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 0.8rem;
+}
+.link-group form button {
+  background: #ff9900;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.link-group form button:hover {
+  background: #e68a00;
+}
+
 /*以下詳細画面*/
 
 /* 地図と投稿全体を囲む箱 */
 .all_content {
-  display: flex; /* 子要素を縦に並べる */
+  display: flex;
   flex-direction: column;
-  align-items: center; /* 子要素を水平方向に中央揃え */
+  align-items: center;
+  padding: 30px;
 }
 
-/* 画像とテキスト要素を囲った箱 */
+.all_content h3 {
+  font-size: 28px;
+  background-color: #FFFAF0;
+  color: #333;
+  text-align: center;
+  width: 60%;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
 .main-content {
-  display: flex; /* 子要素（画像と詳細）を横並びにする */
-  align-items: flex-start; /* 子要素を垂直方向の上端に揃える */
-  gap: 30px; /* 要素間の隙間 */
-  margin-bottom: 20px;
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 80%;
+  max-width: 1000px;
 }
 
-/* 投稿詳細（テキスト）の箱 */
+.image img {
+  border-radius: 8px;
+  object-fit: cover;
+}
+
 .tweet-details {
   display: flex;
-  flex-direction: column; /* この箱の中の要素を縦に並べる */
-  flex-grow: 1; /* 残りのスペースを埋めるように広がる */
+  flex-direction: column;
+  gap: 15px;
+  flex-grow: 1;
 }
 
+/* 各ラベル付きの行 */
+.tweet-details p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.tweet-details strong {
+  display: inline-block;
+  min-width: 120px; /* ラベル幅を揃える */
+  color: #555;
+}
+
+/* レビュー本文 */
 .review_sh {
-  /* 最大幅を設定し、コンテンツの幅がその幅を超えたら自動で改行 */
-  max-width: 400px;
-
+  background: #F9F9F9;
+  padding: 15px;
+  border-radius: 8px;
+  width: 100%;
+  line-height: 1.6;
+  font-size: 1.05rem;
+  white-space: pre-wrap; /* 改行を反映 */
 }
+
+/* 星評価 */
+.star-rating {
+  font-size: 24px;
+  margin-left: 10px;
+}
+
+/* 投稿日時 */
+.created_at {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* タグ */
+.tweet-details span {
+  display: inline-block;
+  background: #EAF6FF;
+  padding: 5px 10px;
+  margin: 5px 5px 0 0;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* ボタン配置 */
+.link-group {
+  margin-top: auto; /* 下部に寄せる */
+  display: flex;
+  gap: 10px;
+}
+
+.link-group form input[type="submit"],
+.link-group button {
+  background-color: #FF8C00;
+  color: #fff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.link-group form input[type="submit"]:hover,
+.link-group button:hover {
+  background-color: #e67e00;
+}
+
+/* マップ */
+.map_container {
+  display: flex;
+  justify-content: center; /* 中央寄せ */
+  margin-top: 20px;
+}
+
+#map {
+  height: 500px;
+  width: 800px;
+  max-width: 100%;   /* スマホ対応 */
+  min-height: 300px; /* 崩れ防止 */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
 
 .review {
   /* 最大幅を設定し、コンテンツの幅がその幅を超えたら自動で改行 */
   max-width: 400px;
 
+}
+
+/*新規投稿ページ*/
+
+.all_container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.big_container {
+  width: 800px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 24px;
+}
+
+.new_title h3 {
+  font-size: 28px;
+  background-color: #FFFAF0;
+  color: #333;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.field label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.field input[type="text"],
+.field textarea,
+.field select,
+.field input[type="file"] {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.new_map h2 {
+  text-align: center;
+  margin: 20px 0 10px;
+  font-size: 20px;
+  color: #333;
+}
+
+.search-map {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.search-map input[type="textbox"] {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 300px;
+}
+
+.search-map input[type="button"] {
+  padding: 6px 16px;
+  background: #3498db;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.search-map input[type="button"]:hover {
+  background: #2980b9;
+}
+
+#results {
+  margin: 12px 0;
+  padding: 8px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#results li {
+  padding: 6px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+#results li:hover {
+  background: #f0f0f0;
+}
+
+#map {
+  display: block;
+  margin: 0 auto;
+  height: 400px;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+input[type="submit"] {
+  display: block;
+  margin: 24px auto 0;
+  padding: 10px 20px;
+  background: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+input[type="submit"]:hover {
+  background: #27ae60;
 }

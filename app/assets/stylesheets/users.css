@@ -1,0 +1,121 @@
+/* 全体の中央寄せ */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+/* フォーム枠 */
+.form-container {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* タイトル */
+.form-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+/* 各入力フィールド */
+.field {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.field label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: #555;
+}
+
+.field input[type="email"],
+.field input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+/* チェックボックス */
+.field input[type="checkbox"] {
+  vertical-align: middle; /* テキストの中央に揃える */
+  position: relative;
+  top: 22px; /* 必要なら微調整 */
+}
+
+/* ログインボタン */
+.actions input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background: #ff6600;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.actions input[type="submit"]:hover {
+  background: #e65500;
+}
+
+/* 下部リンク (新規登録・パスワード忘れなど) */
+.form-container .links {
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.form-container .links a {
+  color: #ff6600;
+  text-decoration: none;
+}
+
+.form-container .links a:hover {
+  text-decoration: underline;
+}
+
+/*アカウント情報変更画面*/
+
+/* 削除セクション */
+.delete-account-box.small {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+h3.delete-title {
+  margin-bottom: 4px; /* デフォルトの大きい余白を縮める */
+  color: #333;
+  font-size: 1.1rem;
+}
+
+/* 削除ボタン（小さめ） */
+.delete-btn.small {
+  background: none;
+  color: #d9534f; /* Bootstrap風の赤 */
+  border: 1px solid #d9534f;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.delete-btn.small:hover {
+  background: #d9534f;
+  color: #fff;
+}

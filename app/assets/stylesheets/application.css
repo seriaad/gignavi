@@ -13,17 +13,124 @@
  *= require_tree .
  *= require_self
  */
-header{
-    display: flex;
-    justify-content: space-between; /* 子要素を両端に配置する */
-    align-items: center; /* 子要素を垂直方向の中央に揃える */
-    padding: 10px 20px;
-    background-color:#FF8C00
+header {
+  display: flex;
+  justify-content: space-between;  /* 左にロゴ、右にメニュー */
+  align-items: center;
+  padding: 12px 40px;
+  background: linear-gradient(90deg, #ff8c00, #ff6600); /* オレンジ系グラデーション */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  position: sticky; /* スクロールしても固定 */
+  top: 0;
+  z-index: 1000;
+}
 
-  }
+/* ロゴ */
+.logo.simple {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  padding-left: 30px;
+}
+h1 a {
+  text-decoration: none;
+  color: inherit; /* 親要素の色を引き継ぐ */
+}
 
-.log-in{
-    display: flex; /* 子要素（ログイン・新規登録）を横並びにする */
-    gap: 15px; /* 要素間の隙間を設定する */
-    justify-content: flex-end;
+/* ヘッダー右側 */
+.header-list {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ログイン・新規登録 */
+.log-in {
+  display: flex;
+  gap: 15px;
+}
+.log-in a, 
+.log-in form button {
+  background: #fff;
+  color: #ff6600;
+  font-weight: bold;
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  font-family: inherit; /* 親要素のフォントを引き継ぐ */
+  font-size: 1rem;       /* 親要素のフォントサイズに合わせる */
+  line-height: normal;   /* 行の高さをデフォルトに戻す */
+}
+.log-in a:hover,
+.log-in form button:hover {
+  background: #ffe0c2;
+  transform: translateY(-2px);
+}
+
+/* 検索フォームのテキストフィールドとボタンのスタイル */
+.search-form input[type="text"],
+.search-form input[type="submit"] {
+  /* デフォルトのスタイルをリセットして高さを揃える */
+  height: 35px; /* 例: 高さの値を固定 */
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  padding: 6px 12px;
+}
+
+/* 検索フォーム */
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.search-form input[type="text"] {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.search-form input[type="submit"] {
+  vertical-align: middle;
+  background: #fff;
+  color: #ff6600;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;     /* ボタン内部の行高をリセット */
+  padding: 6px 14px;  /* 他ボタンと同じ余白 */
+  height: 35px;       /* 検索窓と揃える */
+}
+.search-form input[type="submit"]:hover {
+  background: #ffe0c2;
+}
+
+.search-btn {
+  background: #fff;           /* 白背景 */
+  color: #ff6600;             /* オレンジ文字 */
+  font-weight: bold;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 2px solid #ff6600;  /* 枠線をオレンジに */
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;               /* ログインボタンより低め */
+  font-size: 0.85rem;         /* 文字も少し小さく */
+}
+
+.search-btn:hover {
+  background: #ff6600;  /* ホバーで塗りつぶし */
+  color: #fff;          /* 文字は白に反転 */
 }
