@@ -55,14 +55,14 @@
  </div>
 
   <div class="map_container" >
-   <div id="map"></div>
+   <div id="map-show"></div>
   </div>
 
 
 </div>
 
 <style>
-#map {
+#map-show {
   height: 500px;
   width: 800px;
 }
@@ -75,7 +75,7 @@
 
 // 初期マップの設定
 function initMap() {
-  const mapEl = document.getElementById('map');
+  const mapEl = document.getElementById('map-show');
   if (!mapEl) return;
 
   const lat = <%= @tweet.lat || 'null' %>;
@@ -84,7 +84,7 @@ function initMap() {
   if (lat && lng) {
     const position = { lat: lat, lng: lng };
 
-    map = new google.maps.Map(mapEl, {
+    const map = new google.maps.Map(mapEl, {
       center: position,
       zoom: 15,
     });

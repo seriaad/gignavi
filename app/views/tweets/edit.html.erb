@@ -12,7 +12,7 @@
       </div>
 
       <div class="field">
-        <%= f.label :お店の名前 %>
+        <%= f.label :お店の名前（住所検索から自動入力されるため、入力不要） %>
         <%= f.text_field :shop_name, :size => 30 %>
       </div>
 
@@ -57,12 +57,10 @@
       </div>
 
       <div class="field">
-        <%= f.label :lat, "緯度" %>
-        <%= f.text_field :lat, id: :lat %>
+       <%= f.hidden_field :lat, id: :lat %>
       </div>
       <div class="field">
-        <%= f.label :lng, "経度" %>
-        <%= f.text_field :lng, id: :lng %>
+       <%= f.hidden_field :lng, id: :lng %>
       </div>
       
   
@@ -74,11 +72,11 @@
 
   <div class="search-map">
     <input id="address" type="textbox" value="東京都庁">
-    <input type="button" value="検索" onclick="codeAddress()">
+    <input id="search-btn" type="button" value="検索" onclick="codeAddress()">
   </div>
     <p>マーカーをドラック＆ドロップで位置の調整ができます。<p>
     <div id="results"></div>
-    <div id='map'></div>
+    <div id="map"></div>
 
     <style>
     #map {
@@ -88,101 +86,115 @@
     </style>
 
     <script>
+
+
     //初期マップの設定
     let map;
     let marker;
     let geocoder; // 住所から緯度経度を検索するためのサービス
     let service; // Places APIサービス
-    function initMap(){
-      geocoder = new google.maps.Geocoder();
-      map = new google.maps.Map(document.getElementById('map'), {
-        center:  {lat: 35.6803997, lng:139.7690174},  //東京
-        zoom: 15,
-    
+    function initFormMap(lat = null, lng = null){
+      const mapEl = document.getElementById('map');
+      if (!mapEl) return;
+
+      let center;
+      if (lat && lng) {
+        // 編集ページ（既存データあり）
+       center = { lat: parseFloat(lat), lng: parseFloat(lng) };
+      } else {
+       // 新規投稿ページ（デフォルトは東京）
+       center = { lat: 35.6803997, lng: 139.7690174 };
+      }
+
+      map = new google.maps.Map(mapEl, {
+      center: center,
+      zoom: 15
       });
-      // Places APIのサービスを初期化
+
       service = new google.maps.places.PlacesService(map);
+      geocoder = new google.maps.Geocoder();
 
-      document.getElementById("search-btn").addEventListener("click", codeAddress);
+      if (lat && lng) {
+      // すでにピンがある場合（編集ページ）
+      marker = new google.maps.Marker({
+      map: map,
+      position: center,
+      draggable: true
+     });
 
+      // ピンを動かしたらDB更新用のフォームに反映
+      google.maps.event.addListener(marker, 'dragend', function(ev){
+      document.getElementById('lat').value = ev.latLng.lat();
+      document.getElementById('lng').value = ev.latLng.lng();
+     });
+   }
+}
+     // 住所検索
+function codeAddress() {
+  const inputAddress = document.getElementById('address').value;
+
+  const request = { query: inputAddress };
+  service.textSearch(request, function(results, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      displayResults(results);
+    } else {
+      alert('該当する結果がありませんでした：' + status);
     }
+  });
+}
 
-    //検索後のマップ作成
-    function codeAddress(){
-      const inputAddress = document.getElementById('address').value;
+// 検索結果をリスト表示
+function displayResults(results) {
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
 
-      // Places APIのfindPlaceFromQueryメソッドを使用
-      const request = {
-        query: inputAddress,
-        //fields: ['name', 'geometry', 'formatted_address'], // 必要な情報を指定
-      };
+  results.forEach((result) => {
+    const name = result.name;
+    const address = result.formatted_address;
+    const lat = result.geometry.location.lat();
+    const lng = result.geometry.location.lng();
 
-      service.textSearch(request, function(results, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          displayResults(results); // 検索結果をリスト表示する関数を呼び出し
-         } else {
-          alert('該当する結果がありませんでした：' + status);
-         }
+    const li = document.createElement('li');
+    li.textContent = `${name} (${address}) - 緯度: ${lat}, 経度: ${lng}`;
+
+    li.onclick = function() {
+      if (marker) marker.setMap(null);
+
+      const latLng = result.geometry.location;
+      marker = new google.maps.Marker({
+        map: map,
+        position: latLng,
+        draggable: true
       });
-    }
+      map.setCenter(latLng);
 
-    // 検索結果をリストで表示し、クリックでマーカーを立てる関数
-    function displayResults(results){
-      const resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = ''; // 前回の検索結果をクリア
+      document.getElementById('lat').value = latLng.lat();
+      document.getElementById('lng').value = latLng.lng();
+      document.getElementById('tweet_shop_name').value = result.name;
 
-      results.forEach((result, index) => {
-        const name = result.name; // Places APIの結果から店名を取得
-        const address = result.formatted_address; // 住所を取得
-        const lat = result.geometry.location.lat(); // 緯度を取得
-        const lng = result.geometry.location.lng(); // 経度を取得
-
-        const li = document.createElement('li');
-        // リストのテキストに緯度と経度を追加
-        li.textContent = `${name} (${address}) - 緯度: ${lat}, 経度: ${lng}`;
-
-        li.onclick = function() {
-          // クリックされた場所の緯度経度を取得
-          const latLng = result.geometry.location;
-
-          // 既存のマーカーがあれば削除
-          if(marker) {
-            marker.setMap(null);
-          }
-      
-          // 新しいマーカーを設置
-          marker = new google.maps.Marker({
-            map: map,
-            position: latLng,
-            draggable: true // ドラッグ可能にする
-          });
-          map.setCenter(latLng);
-
-          // 緯度経度をフォームに自動入力
-          document.getElementById('lat').value = latLng.lat();
-          document.getElementById('lng').value = latLng.lng();
-
-          // ライブ会場/店名をフォームに自動入力
-          document.getElementById('tweet_shop_name').value = result.name;
-
-          // マーカーのドロップ（ドラッグ終了）時のイベントリスナー
-          google.maps.event.addListener(marker, 'dragend', function(ev){
-            document.getElementById('lat').value = ev.latLng.lat();
-            document.getElementById('lng').value = ev.latLng.lng();
-          });
-        }
-        resultsDiv.appendChild(li);
+      google.maps.event.addListener(marker, 'dragend', function(ev) {
+        document.getElementById('lat').value = ev.latLng.lat();
+        document.getElementById('lng').value = ev.latLng.lng();
       });
-    }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_KEY'] %>&callback=initMap&libraries=places" async defer></script>
-    
-      <%= f.submit "更新する" %>
+    };
+    resultsDiv.appendChild(li);
+  });
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAP_KEY'] %>&callback=initMapWrapper&libraries=places" async defer></script>
+
+<script>
+  // Google Maps の callback で呼ばれるラッパー
+  function initMapWrapper() {
+    initFormMap(<%= @tweet.lat || 'null' %>, <%= @tweet.lng || 'null' %>);
+  }
+</script>
+      <%= f.submit "投稿する" %>
    <% end %>
     <br>
     <br>
     <%= link_to "一覧に戻る", tweets_path %>
-
 
 </div>
 </div>

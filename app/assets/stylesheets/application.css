@@ -134,3 +134,17 @@ h1 a {
   background: #ff6600;  /* ホバーで塗りつぶし */
   color: #fff;          /* 文字は白に反転 */
 }
+
+.site-footer {
+  background: linear-gradient(90deg, #ff8c00, #ff6600); /* ヘッダーと同じ */
+  color: #fff;
+  text-align: center;
+  padding: 12px 10px;
+  font-size: 0.85rem;
+  margin-top: 40px; /* 本文との余白 */
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.15); /* 上側に影 */
+}
+
+.site-footer p {
+  margin: 0;
+}
